@@ -53,10 +53,13 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
+<<<<<<< HEAD
             <artifactId>quarkus-rest-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
+=======
+>>>>>>> a9050e656509657842792441ebb43fe67a2d0258
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
         </dependency>
