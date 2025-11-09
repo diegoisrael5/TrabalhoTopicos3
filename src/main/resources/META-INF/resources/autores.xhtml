@@ -1,0 +1,153 @@
+<ui:composition template="/templates/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="title">Autores</ui:define>
+
+    <ui:define name="content">
+
+        <!-- Cabeçalho -->
+        <div class="page-header">
+            <h2>📖 Autores Cadastrados</h2>
+            <p>Confira os autores registrados e a quantidade de livros publicados por cada um.</p>
+        </div>
+
+        <!-- Conteúdo principal -->
+        <h:panelGroup rendered="#{not empty bibliotecaBean.autores}">
+            <div class="card-container">
+                <ui:repeat value="#{bibliotecaBean.autores}" var="autor">
+                    <div class="card">
+                        <h3>👤 #{autor.nome}</h3>
+                        <p><strong>Email:</strong> #{autor.email}</p>
+                        <p><strong>Livros Publicados:</strong> #{autor.livros.size()}</p>
+                        <p class="bio"><strong>Sobre:</strong> #{autor.biografia}</p>
+                    </div>
+                </ui:repeat>
+            </div>
+        </h:panelGroup>
+
+        <!-- Caso não tenha registros -->
+        <h:panelGroup rendered="#{empty bibliotecaBean.autores}">
+            <div class="no-data">
+                <h:outputText value="Nenhum autor cadastrado até o momento." />
+            </div>
+        </h:panelGroup>
+
+        <!-- Rodapé -->
+        <div class="footer">
+            <h:link value="⬅️ Voltar ao Dashboard" outcome="index.xhtml" styleClass="link-voltar" />
+            <p class="total">Total de autores: #{bibliotecaBean.autores.size()}</p>
+        </div>
+
+        <!-- ===================== -->
+        <!-- Estilos customizados -->
+        <!-- ===================== -->
+        <style>
+            /* Layout geral */
+            .page-header {
+                text-align: center;
+                margin-bottom: 25px;
+            }
+
+            .page-header h2 {
+                color: #333;
+                font-size: 1.8em;
+                margin-bottom: 5px;
+            }
+
+            .page-header p {
+                color: #666;
+                font-size: 1em;
+            }
+
+            /* Cards responsivos */
+            .card-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 20px;
+                padding: 10px;
+            }
+
+            .card {
+                background-color: #fff;
+                border-radius: 12px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+                padding: 20px;
+                border-top: 5px solid #60a5fa;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            }
+
+            .card h3 {
+                color: #1e293b;
+                margin-bottom: 10px;
+                font-size: 1.2em;
+            }
+
+            .card p {
+                color: #555;
+                margin: 4px 0;
+                line-height: 1.4;
+            }
+
+            .bio {
+                color: #374151;
+                font-style: italic;
+                font-size: 0.95em;
+                margin-top: 8px;
+            }
+
+            /* Quando não há dados */
+            .no-data {
+                text-align: center;
+                color: #999;
+                margin-top: 30px;
+                font-style: italic;
+            }
+
+            /* Rodapé */
+            .footer {
+                text-align: center;
+                margin-top: 40px;
+                padding-top: 15px;
+                border-top: 1px solid #e5e7eb;
+            }
+
+            .link-voltar {
+                color: #60a5fa;
+                text-decoration: none;
+                font-weight: bold;
+                transition: color 0.2s;
+            }
+
+            .link-voltar:hover {
+                color: #1d4ed8;
+                text-decoration: underline;
+            }
+
+            .total {
+                color: #555;
+                font-size: 0.9em;
+                margin-top: 8px;
+            }
+
+            /* Responsividade */
+            @media (max-width: 600px) {
+                .card-container {
+                    grid-template-columns: 1fr;
+                }
+
+                .page-header h2 {
+                    font-size: 1.5em;
+                }
+            }
+        </style>
+
+    </ui:define>
+</ui:composition>

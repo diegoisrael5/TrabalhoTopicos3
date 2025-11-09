@@ -1,0 +1,11 @@
+<h:form id="formReserva">
+    <h:panelGrid columns="2" cellpadding="5">
+        <h:outputLabel for="livro" value="Livro:" />
+        <h:inputText id="livro" value="#{reservaBean.reserva.livro}" />
+
+        <h:outputLabel for="usuario" value="Usuário:" />
+        <h:inputText id="usuario" value="#{reservaBean.reserva.usuario}" />
+
+        <h:commandButton value="Reservar" action="#{reservaBean.salvar}" />
+    </h:panelGrid>
+</h:form>

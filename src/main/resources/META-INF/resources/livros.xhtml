@@ -1,0 +1,40 @@
+<ui:composition template="/templates/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Livros</ui:define>
+
+    <ui:define name="content">
+        <h2>📚 Catálogo Completo de Livros</h2>
+        <p>Acompanhe os livros cadastrados, seus autores e disponibilidade atual.</p>
+
+        <h:form>
+            <h:dataTable value="#{bibliotecaBean.livros}" var="livro" border="0" cellpadding="6"
+                         style="width:100%;border-collapse:collapse;margin-top:20px;">
+                <h:column>
+                    <f:facet name="header">Título</f:facet>
+                    #{livro.titulo}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Autor</f:facet>
+                    #{livro.autor.nome}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">ISBN</f:facet>
+                    #{livro.isbn}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                    <h:outputText value="#{livro.disponivel ? 'Disponível' : 'Emprestado'}"
+                                  style="font-weight:bold;color:#{livro.disponivel ? '#22c55e' : '#f87171'}" />
+                </h:column>
+            </h:dataTable>
+        </h:form>
+
+        <div style="margin-top:25px;text-align:center;">
+            <h:link value="⬅️ Voltar para o Dashboard" outcome="index.xhtml" style="color:#60a5fa;font-weight:bold;" />
+        </div>
+    </ui:define>
+</ui:composition>

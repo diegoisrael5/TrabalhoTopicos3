@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Biblioteca Digital</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+        :root {
+            --bg: #0b1020;
+            --bg-2: #0f1730;
+            --card: #0f1b3d;
+            --card-2: #0c1531;
+            --text: #e5e7eb;
+            --muted: #a5b4fc;
+            --border: rgba(255, 255, 255, .08);
+            --primary: #60a5fa;
+            --accent: #34d399;
+            --warn: #fbbf24;
+            --bad: #f87171;
+            --ok: #22c55e;
+        }
+
+        /* Reset / base */
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0;
+            background: linear-gradient(180deg, var(--bg), var(--bg-2));
+            color: var(--text);
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px
+        }
+
+        /* Topbar fixa */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            backdrop-filter: blur(8px);
+            background: linear-gradient(180deg, rgba(10, 15, 30, .85), rgba(10, 15, 30, .65));
+            border-bottom: 1px solid var(--border)
+        }
+
+        .topbar .wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0
+        }
+
+        .brand {
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+        .logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(120px 60px at 20% 20%, #1e293b, #0ea5e9);
+            font-weight: 900
+        }
+
+        .brand .title {
+            font-weight: 800;
+            letter-spacing: .2px
+        }
+
+        nav ul {
+            display: flex;
+            gap: 14px;
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+
+        nav a {
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid transparent
+        }
+
+        nav a:hover {
+            border-color: var(--border);
+            background: rgba(255, 255, 255, .04)
+        }
+
+        /* Hero */
+        .hero {
+            margin: 24px 0 0;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            background:
+                linear-gradient(120deg, rgba(14, 165, 233, .15), rgba(52, 211, 153, .08)),
+                url('https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&amp;fit=crop&amp;w=1600&amp;q=80') center/cover no-repeat;
+        }
+
+        .hero .veil {
+            background: linear-gradient(180deg, rgba(3, 7, 18, .75), rgba(3, 7, 18, .35));
+            padding: 44px 22px
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+            font-weight: 900
+        }
+
+        .hero p {
+            margin: 0;
+            color: #e2e8f0
+        }
+
+        .hero .quick {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px
+        }
+
+        .chip {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .06);
+            font-size: 13px
+        }
+
+        /* Blocos */
+        .block {
+            margin: 22px 0;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: linear-gradient(180deg, var(--card), var(--card-2));
+            overflow: hidden
+        }
+
+        .block .head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 18px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .block h2 {
+            margin: 0;
+            font-size: 18px
+        }
+
+        .sub {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        /* Painel de métricas */
+        .stats {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            padding: 16px
+        }
+
+        .stat {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, .02)
+        }
+
+        .stat .thumb {
+            height: 120px;
+            background: #0b1328
+        }
+
+        .stat .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: .9
+        }
+
+        .stat .meta {
+            padding: 14px 14px 16px
+        }
+
+        .label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .value {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-top: 6px
+        }
+
+        /* Barra de filtro visual (sem JS) */
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .input {
+            flex: 1 1 260px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, .04)
+        }
+
+        .tag {
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, .03);
+            font-size: 13px
+        }
+
+        .tag[data-active="true"] {
+            border-color: rgba(255, 255, 255, .25);
+            background: rgba(99, 102, 241, .18)
+        }
+
+        /* Tabelas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: transparent
+        }
+
+        th,
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px
+        }
+
+        th {
+            text-transform: uppercase;
+            color: var(--muted);
+            font-size: 12px;
+            text-align: left;
+            background: rgba(255, 255, 255, .03)
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, .03)
+        }
+
+        .capa {
+            width: 44px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid var(--border)
+        }
+
+        .ok {
+            color: var(--ok);
+            font-weight: 700
+        }
+
+        .bad {
+            color: var(--bad);
+            font-weight: 700
+        }
+
+        /* Grid responsivo para seções com imagem lateral (autores) */
+        .split {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0
+        }
+
+        @media(min-width:900px) {
+            .split {
+                grid-template-columns: 380px 1fr
+            }
+        }
+
+        .panel-img {
+            border-right: 1px solid var(--border);
+            background: #0b1328
+        }
+
+        .panel-img img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: .85
+        }
+
+        /* Rodapé */
+        footer {
+            margin: 28px 0 50px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="topbar">
+        <div class="container wrap">
+            <div class="brand">
+                <div class="logo">📚</div>
+                <div class="title">Biblioteca Digital</div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#painel">Painel</a></li>
+                    <li><a href="#autores">Autores</a></li>
+                    <li><a href="#livros">Livros</a></li>
+                    <li><a href="#emprestimos">Empréstimos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="container">
+        <section class="hero">
+            <div class="veil">
+                <h1>Seu acervo, organizado e elegante</h1>
+                <p>Estatísticas, catálogo e movimentação de empréstimos num único painel.</p>
+                <div class="quick">
+                    <span class="chip">Catálogo atualizado</span>
+                    <span class="chip">JSF + Quarkus</span>
+                    <span class="chip">PostgreSQL</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAINEL / MÉTRICAS -->
+        <section id="painel" class="block">
+            <div class="head">
+                <div>
+                    <h2>Painel</h2>
+                    <div class="sub">Visão geral do acervo</div>
+                </div>
+                <div class="toolbar">
+                    <div class="input" aria-label="Busca visual sem funcionalidade JS">🔎
+                        <span class="sub">Busca rápida (visual)</span>
+                    </div>
+                    <span class="tag" data-active="true">Hoje</span>
+                    <span class="tag">7 dias</span>
+                    <span class="tag">30 dias</span>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="thumb">
+                        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                            alt="Livros empilhados" />
+                    </div>
+                    <div class="meta">
+                        <div class="label">Total de Livros</div>
+                        <div class="value">#{bibliotecaBean.totalLivros}</div>
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="thumb">
+                        <img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                            alt="Leitura e disponibilidade" />
+                    </div>
+                    <div class="meta">
+                        <div class="label">Disponíveis</div>
+                        <div class="value">#{bibliotecaBean.livrosDisponiveis}</div>
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="thumb">
+                        <img src="https://images.unsplash.com/photo-1524578271613-d550eacf6090?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                            alt="Pessoa pegando livro" />
+                    </div>
+                    <div class="meta">
+                        <div class="label">Empréstimos Ativos</div>
+                        <div class="value">#{bibliotecaBean.emprestimosAtivosCount}</div>
+                    </div>
+                </div>
+                <div class="stat">
+                    <div class="thumb">
+                        <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                            alt="Autores escrevendo e criando histórias" />
+                    </div>
+                    <div class="meta">
+                        <div class="label">Autores</div>
+                        <div class="value">#{bibliotecaBean.totalAutores}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div style="text-align:center; margin-top: 25px; margin-bottom: 40px;">
+            <h:form>
+                <h:commandButton value="📚 Reservar um Livro" action="emprestimos.xhtml?faces-redirect=true" style="background: linear-gradient(135deg, #2563eb, #3b82f6);
+                                color: #fff;
+                                font-weight: 600;
+                                font-size: 16px;
+                                border: none;
+                                padding: 14px 36px;
+                                border-radius: 10px;
+                                cursor: pointer;
+                                box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+                                transition: all 0.25s ease;
+                                letter-spacing: 0.3px;" onmouseover="this.style.background='linear-gradient(135deg, #1e40af, #2563eb)'; 
+                                      this.style.transform='translateY(-3px)';" onmouseout="this.style.background='linear-gradient(135deg, #2563eb, #3b82f6)';
+                                     this.style.transform='translateY(0)';" onclick="this.style.transform='scale(0.96)'; 
+                                  setTimeout(()=>this.style.transform='scale(1)',150);" />
+            </h:form>
+        </div>
+
+
+        <!-- AUTORES: layout split com imagem lateral -->
+        <section id="autores" class="block">
+            <div class="head">
+                <div>
+                    <h2>Autores</h2>
+                    <div class="sub">Escritores cadastrados e sua produção</div>
+                </div>
+            </div>
+
+            <div class="split">
+                <div class="panel-img" aria-hidden="true">
+                    <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                        alt="Biblioteca com estantes" />
+                </div>
+                <div style="padding:16px">
+                    <table aria-label="Tabela de autores">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Livros</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ui:repeat value="#{bibliotecaBean.autores}" var="a">
+                                <tr>
+                                    <td>
+                                        <h:outputText value="#{a.nome}" />
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{a.email}" />
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{a.livros.size()}" />
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIVROS -->
+        <section id="livros" class="block">
+            <div class="head">
+                <div>
+                    <h2>Catálogo de Livros</h2>
+                    <div class="sub">Acervo disponível e emprestado</div>
+                </div>
+            </div>
+
+            <div style="padding:16px">
+                <table aria-label="Tabela de livros">
+                    <thead>
+                        <tr>
+                            <th>Capa</th>
+                            <th>Título</th>
+                            <th>Autor</th>
+                            <th>ISBN</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{bibliotecaBean.livros}" var="l">
+                            <tr>
+                                <td>
+                                    <img class="capa"
+                                        src="#{l.titulo eq 'O Guarani'
+                            ? 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?auto=format&amp;fit=crop&amp;w=240&amp;q=80'
+                            : (l.titulo eq 'Dom Casmurro'
+                                ? 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&amp;fit=crop&amp;w=240&amp;q=80'
+                                : (l.titulo eq 'A Hora da Estrela'
+                                    ? 'https://images.unsplash.com/photo-1473187983305-f615310e7daa?auto=format&amp;fit=crop&amp;w=240&amp;q=80'
+                                    : 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&amp;fit=crop&amp;w=240&amp;q=80'))}"
+                                        alt="Capa do livro #{l.titulo}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{l.titulo}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{l.autor.nome}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{l.isbn}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{l.disponivel ? 'Disponível' : 'Emprestado'}"
+                                        styleClass="#{l.disponivel ? 'ok' : 'bad'}" />
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                    </tbody>
+
+
+                </table>
+            </div>
+        </section>
+
+        <!-- EMPRÉSTIMOS -->
+        <section id="emprestimos" class="block">
+            <div class="head">
+                <div>
+                    <h2>Empréstimos Ativos</h2>
+                    <div class="sub">Registros em andamento</div>
+                </div>
+                <div class="toolbar">
+                    <span class="tag" data-active="true">Todos</span>
+                    <span class="tag">A vencer</span>
+                    <span class="tag">Atrasados</span>
+                </div>
+            </div>
+
+            <div style="padding:16px">
+                <table aria-label="Tabela de empréstimos">
+                    <thead>
+                        <tr>
+                            <th>Usuário</th>
+                            <th>Livro</th>
+                            <th>Data Empréstimo</th>
+                            <th>Data Prevista</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{bibliotecaBean.emprestimosAtivos}" var="e">
+                            <tr>
+                                <td>
+                                    <h:outputText value="#{e.nomeUsuario}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{e.livro.titulo}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{e.dataEmprestimo}" />
+                                </td>
+                                <td>
+                                    <h:outputText value="#{e.dataDevolucaoPrevista}" />
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer>© 2025 Biblioteca Digital</footer>
+    </div>
+</h:body>
+
+</html>

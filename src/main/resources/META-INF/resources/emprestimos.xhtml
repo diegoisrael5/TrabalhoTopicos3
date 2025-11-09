@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Empréstimos</title>
+    <style>
+        :root {
+            --bg: #0b1020;
+            --bg-2: #0f1730;
+            --card: #0f1b3d;
+            --card-2: #0c1531;
+            --text: #e5e7eb;
+            --muted: #a5b4fc;
+            --border: rgba(255, 255, 255, .08);
+            --primary: #3b82f6;
+            --accent: #22c55e;
+            --warn: #f59e0b;
+            --bad: #ef4444;
+            --ok: #22c55e;
+        }
+
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(180deg, var(--bg), var(--bg-2));
+            color: var(--text);
+            margin: 20px;
+        }
+
+        h2 {
+            color: var(--text);
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+        }
+
+        hr {
+            margin: 25px 0;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: var(--card);
+            color: var(--muted);
+            text-align: left;
+            padding: 10px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 255, 255, .03);
+        }
+
+        h\\:form, .panelGrid {
+            background: var(--card-2);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #15803d, #16a34a);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #b45309, #d97706);
+        }
+
+        .status-emprestado {
+            color: var(--bad);
+            font-weight: bold;
+        }
+
+        .status-devolvido {
+            color: var(--ok);
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 8px;
+            width: 95%;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #0f1f3d;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <div class="card">
+            <h2>Registrar Novo Empréstimo</h2>
+
+            <h:form id="formEmprestimo">
+                <h:messages globalOnly="true" layout="table" style="color:#f87171;"/>
+
+                <h:panelGrid columns="2" cellpadding="5" columnClasses="label,value">
+                    <h:outputLabel value="Usuário:" for="usuario"/>
+                    <h:inputText id="usuario"
+                                 value="#{emprestimoBean.novoEmprestimo.nomeUsuario}"
+                                 required="true"
+                                 requiredMessage="Informe o nome do usuário."/>
+
+                    <h:outputLabel value="E-mail:" for="email"/>
+                    <h:inputText id="email"
+                                 value="#{emprestimoBean.novoEmprestimo.emailUsuario}"
+                                 required="true"
+                                 requiredMessage="Informe o e-mail do usuário."/>
+
+                    <h:outputLabel value="Livro:" for="livro"/>
+                    <h:selectOneMenu id="livro"
+                                     value="#{emprestimoBean.novoEmprestimo.livro}"
+                                     converter="livroConverter"
+                                     required="true"
+                                     requiredMessage="Selecione um livro.">
+                        <f:selectItem itemLabel="-- Selecione um livro --" itemValue="#{null}" noSelectionOption="true"/>
+                        <f:selectItems value="#{emprestimoBean.livrosDisponiveis}"
+                                       var="livro"
+                                       itemValue="#{livro}"
+                                       itemLabel="#{livro.titulo}" />
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="Observações:" for="obs"/>
+                    <h:inputTextarea id="obs"
+                                     value="#{emprestimoBean.novoEmprestimo.observacoes}"
+                                     cols="30" rows="3"/>
+
+                    <h:outputLabel/>
+                    <h:commandButton value="Registrar Empréstimo"
+                                     action="#{emprestimoBean.salvar}"
+                                     styleClass="btn">
+                        <f:ajax execute="@form" render="@form :msg :tabelaEmprestimos"/>
+                    </h:commandButton>
+                </h:panelGrid>
+
+                <h:messages id="msg" globalOnly="true" style="color:#22c55e; margin-top:10px;"/>
+            </h:form>
+        </div>
+
+        <hr/>
+
+        <div class="card">
+            <h2>Empréstimos Ativos</h2>
+
+            <h:form id="formTabela">
+                <h:dataTable id="tabelaEmprestimos"
+                             value="#{emprestimoBean.emprestimos}"
+                             var="emp"
+                             border="0" cellpadding="6">
+                    <h:column>
+                        <f:facet name="header">Usuário</f:facet>
+                        #{emp.nomeUsuario}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Livro</f:facet>
+                        #{emp.livro.titulo}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">E-mail</f:facet>
+                        #{emp.emailUsuario}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Data Empréstimo</f:facet>
+                        #{emp.dataEmprestimo}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Devolução Prevista</f:facet>
+                        #{emp.dataDevolucaoPrevista}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Status</f:facet>
+                        <h:outputText value="Emprestado"
+                                      rendered="#{emp.dataDevolucao == null}"
+                                      styleClass="status-emprestado"/>
+                        <h:outputText value="Devolvido"
+                                      rendered="#{emp.dataDevolucao != null}"
+                                      styleClass="status-devolvido"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Ações</f:facet>
+
+                        <h:commandButton value="Devolver"
+                                         action="#{emprestimoBean.devolver(emp)}"
+                                         rendered="#{empty emp.dataDevolucao}"
+                                         styleClass="btn-success">
+                            <f:ajax render=":formTabela :msg"/>
+                        </h:commandButton>
+
+                        <h:commandButton value="Reservar"
+                                         action="#{emprestimoBean.reservar(emp.livro)}"
+                                         rendered="#{!emp.livro.disponivel}"
+                                         styleClass="btn-warning"
+                                         style="margin-left:5px;">
+                            <f:ajax render=":formTabela :msg"/>
+                        </h:commandButton>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </div>
+    </div>
+</h:body>
+</html>

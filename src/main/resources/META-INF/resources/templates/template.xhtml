@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title><ui:insert name="title">Biblioteca Digital</ui:insert></title>
+
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(180deg, #0b1020, #0f1730);
+            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: linear-gradient(180deg, rgba(14, 165, 233, 0.15), rgba(52, 211, 153, 0.08));
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+            color: #60a5fa;
+        }
+        nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        nav a {
+            color: #e5e7eb;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 999px;
+            transition: all .2s ease;
+        }
+        nav a:hover {
+            background: rgba(255, 255, 255, .08);
+        }
+        main {
+            padding: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #a5b4fc;
+            border-top: 1px solid rgba(255,255,255,.08);
+            padding: 16px 0;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <header>
+        <h1>📚 Biblioteca Digital</h1>
+        <nav>
+            <h:link value="Dashboard" outcome="index.xhtml" /> |
+            <h:link value="Autores" outcome="autores.xhtml" /> |
+            <h:link value="Livros" outcome="livros.xhtml" /> |
+            <h:link value="Empréstimos" outcome="emprestimos.xhtml" />
+        </nav>
+    </header>
+
+    <main>
+        <ui:insert name="content" />
+    </main>
+
+    <footer>
+        © 2025 Biblioteca Digital - Desenvolvido por Diego
+    </footer>
+</h:body>
+</html>
